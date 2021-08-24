@@ -15,11 +15,20 @@ public class OrderModel {
     @Column
     public int price;
     
-    // public OrderModel(Long id, String ownerName, int price){
-    //     this.id = id;
-    //     this.ownerName = ownerName;
-    //     this.price = price;
-    // }
+    public OrderModel(){
+        
+    }
+    
+    public OrderModel(String ownerName, int price){
+        this.ownerName = ownerName;
+        this.price = price;
+    }
+    
+    public OrderModel(Long id, String ownerName, int price){
+        this.id = id;
+        this.ownerName = ownerName;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
@@ -43,5 +52,10 @@ public class OrderModel {
 
     public void setSpecialty(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString(){
+        return "{\'id\'':\'"+ getId() + "\',\'ownername\':\'"+ getOwnerName() + "\',\'price\':\'"+ getPrice() + "\'}";
     }
 }

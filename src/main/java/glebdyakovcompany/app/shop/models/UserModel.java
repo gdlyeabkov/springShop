@@ -30,14 +30,25 @@ public class UserModel {
     @Column
     public ArrayList<Map<String, Object>> productsInBucket;
     
-    // public UserModel(Long id, String email, String password, String name, int age, int moneys, ArrayList<Map<String, Object>> productsInBucket){
-    //     this.id = id;
-    //     this.email = email;
-    //     this.password = password;
-    //     this.name = name;
-    //     this.age = age;
-    //     this.productsInBucket = productsInBucket;
-    // }
+    public UserModel(){
+    }
+    
+    public UserModel(String email, String password, String name, int age, int moneys, ArrayList<Map<String, Object>> productsInBucket){
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.age = age;
+        this.productsInBucket = productsInBucket;
+    }
+
+    public UserModel(Long id, String email, String password, String name, int age, int moneys, ArrayList<Map<String, Object>> productsInBucket){
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.age = age;
+        this.productsInBucket = productsInBucket;
+    }
 
     public Long getId() {
         return id;
@@ -95,4 +106,10 @@ public class UserModel {
     public void setProductsInBucket(ArrayList<Map<String, Object>> productsInBucket) {
         this.productsInBucket = productsInBucket;
     }
+
+    @Override
+    public String toString(){
+        return "{\'id\'':\'"+ getId() + "\',\'email\':\'"+ getEmail() + "\',\'password\':\'"+ getPassword() + "\',\'name\':\'"+ getName() + "\',\'age\':\'"+ getAge() + "\',\'moneys\':\'"+ getMoneys() + "\',\'productsInBucket\':\'"+ "[]" + "\'}";
+    }
+
 }

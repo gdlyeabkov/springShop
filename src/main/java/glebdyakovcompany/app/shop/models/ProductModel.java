@@ -17,11 +17,19 @@ public class ProductModel {
     @Column
     public int price;
     
-    // public ProductModel(Long id, String name, int price){
-    //     this.id = id;
-    //     this.name = name;
-    //     this.price = price;
-    // }
+    public ProductModel(){
+    }
+
+    public ProductModel(String name, int price){
+        this.name = name;
+        this.price = price;
+    }
+
+    public ProductModel(Long id, String name, int price){
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
@@ -45,5 +53,12 @@ public class ProductModel {
 
     public void setSpecialty(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString(){
+        return "{\'id\'':\'"+ getId() + "\',\'name\':\'"+ getName() + "\',\'price\':\'"+ getPrice() + "\'}";
+        // return "{\'id\':2}";
+        // return "abc";
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
+import glebdyakovcompany.app.shop.models.OrderModel;
 import glebdyakovcompany.app.shop.models.ProductModel;
 
 // import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -112,37 +113,58 @@ public class MainController {
 	@CrossOrigin
 	@RequestMapping(value = "/users/bucket/delete", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String usersBucketDelete(@RequestParam String useremail, @RequestParam String productid)  {
-		ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
-		long firstId = 1;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 0, new ArrayList<Map<String, Object>>()));
-		long secondId = 2;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 0, new ArrayList<Map<String, Object>>()));
-		System.out.println("email: " + useremail);
+		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
+		// long firstId = 1;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 0, new ArrayList<Map<String, Object>>()));
+		// long secondId = 2;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 0, new ArrayList<Map<String, Object>>()));
+		// System.out.println("email: " + useremail);
+		// HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
+		// firstProductInFirstBucket.put("id", "1");
+		// firstProductInFirstBucket.put("name", "box");
+		// firstProductInFirstBucket.put("price", 30);
+		// HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
+		// secondProductInFirstBucket.put("id", "2");
+		// secondProductInFirstBucket.put("name", "pen");
+		// secondProductInFirstBucket.put("price", 15);
+		// users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
+		// users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
+		// firstProductInSecondBucket.put("id", "1");
+		// firstProductInSecondBucket.put("name", "tv");
+		// firstProductInSecondBucket.put("price", 200);
+		// HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
+		// secondProductInSecondBucket.put("id", "2");
+		// secondProductInSecondBucket.put("name", "juice");
+		// secondProductInSecondBucket.put("price", 75);
+		// users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
+		// users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
+		// users.forEach((user) -> {
+		// 	if(user.email.contains(useremail)){
+		// 		this.currentUser = user;
+		// 		System.out.println("this.currentUser: " + this.currentUser.email);
+		// 	} else if(!user.email.contains(useremail)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// this.currentUser.getProductsInBucket().forEach((product) -> {
+		// 	System.out.println("product.get(id): " + product.get("id"));
+		// 	this.cursorOfDelete++;
+		// 	Object currentProductId = product.get("id");
+		// 	if(currentProductId.toString().contains(productid)){
+		// 		this.indexOfDelete = this.cursorOfDelete;
+		// 		System.out.println("Нашёл");
+		// 	} else if(!currentProductId.toString().contains(productid)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// if(indexOfDelete >= 0){
+		// 	this.currentUser.getProductsInBucket().remove(this.indexOfDelete);
+		// }
+		// return "{\"status\":\"OK\",\"message\":\"success\",\"products\":\"" + this.currentUser.getProductsInBucket().get(0).get("id") + "\"}";
 		
-		HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
-		firstProductInFirstBucket.put("id", "1");
-		firstProductInFirstBucket.put("name", "box");
-		firstProductInFirstBucket.put("price", 30);
-		HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
-		secondProductInFirstBucket.put("id", "2");
-		secondProductInFirstBucket.put("name", "pen");
-		secondProductInFirstBucket.put("price", 15);
-		users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
-		users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
-
-		HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
-		firstProductInSecondBucket.put("id", "1");
-		firstProductInSecondBucket.put("name", "tv");
-		firstProductInSecondBucket.put("price", 200);
-		HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
-		secondProductInSecondBucket.put("id", "2");
-		secondProductInSecondBucket.put("name", "juice");
-		secondProductInSecondBucket.put("price", 75);
-		users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
-		users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
-		
-
-		users.forEach((user) -> {
+		this.cursorOfDelete = 0;
+		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.currentUser = user;
 				System.out.println("this.currentUser: " + this.currentUser.email);
@@ -150,7 +172,6 @@ public class MainController {
 				System.out.println("Не нашёл");
 			}
 		});
-		
 		this.currentUser.getProductsInBucket().forEach((product) -> {
 			System.out.println("product.get(id): " + product.get("id"));
 			this.cursorOfDelete++;
@@ -164,9 +185,8 @@ public class MainController {
 		});
 		if(indexOfDelete >= 0){
 			this.currentUser.getProductsInBucket().remove(this.indexOfDelete);
+			userRepository.save(this.currentUser);
 		}
-		
-		// return this.currentUser;
 		return "{\"status\":\"OK\",\"message\":\"success\",\"products\":\"" + this.currentUser.getProductsInBucket().get(0).get("id") + "\"}";
 
 	}
@@ -174,72 +194,92 @@ public class MainController {
 	@CrossOrigin
 	@RequestMapping(value = "/users/amount", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String usersAmount(@RequestParam String useremail, @RequestParam int amount)  {
-		ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
-		long firstId = 1;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 0, new ArrayList<Map<String, Object>>()));
-		long secondId = 2;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 0, new ArrayList<Map<String, Object>>()));
-		System.out.println("email: " + useremail);
-		System.out.println("amount: " + amount);
-		
-		HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
-		firstProductInFirstBucket.put("name", "box");
-		firstProductInFirstBucket.put("price", 30);
-		HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
-		secondProductInFirstBucket.put("name", "pen");
-		secondProductInFirstBucket.put("price", 15);
-		users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
-		users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
-
-		HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
-		firstProductInSecondBucket.put("name", "tv");
-		firstProductInSecondBucket.put("price", 200);
-		HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
-		secondProductInSecondBucket.put("name", "juice");
-		secondProductInSecondBucket.put("price", 75);
-		users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
-		users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
-		
-		users.forEach((user) -> {
+		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
+		// long firstId = 1;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 0, new ArrayList<Map<String, Object>>()));
+		// long secondId = 2;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 0, new ArrayList<Map<String, Object>>()));
+		// System.out.println("email: " + useremail);
+		// System.out.println("amount: " + amount);
+		// HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
+		// firstProductInFirstBucket.put("name", "box");
+		// firstProductInFirstBucket.put("price", 30);
+		// HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
+		// secondProductInFirstBucket.put("name", "pen");
+		// secondProductInFirstBucket.put("price", 15);
+		// users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
+		// users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
+		// firstProductInSecondBucket.put("name", "tv");
+		// firstProductInSecondBucket.put("price", 200);
+		// HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
+		// secondProductInSecondBucket.put("name", "juice");
+		// secondProductInSecondBucket.put("price", 75);
+		// users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
+		// users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
+		// users.forEach((user) -> {
+		// 	if(user.email.contains(useremail)){
+		// 		this.currentUser = user;
+		// 		System.out.println("this.currentUser: " + this.currentUser.email);
+		// 	} else if(!user.email.contains(useremail)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// this.currentUser.moneys += amount;
+		// return "{\"status\":\"OK\",\"moneys\":\"" + this.currentUser.getMoneys() + "\",\"message\":\"success\"}";
+	
+		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.currentUser = user;
-				System.out.println("this.currentUser: " + this.currentUser.email);
-			} else if(!user.email.contains(useremail)){
-				System.out.println("Не нашёл");
+				user.moneys += amount;
+				userRepository.save(user);
 			}
 		});
-		this.currentUser.moneys += amount;
 		return "{\"status\":\"OK\",\"moneys\":\"" + this.currentUser.getMoneys() + "\",\"message\":\"success\"}";
 	}
 	
 	@CrossOrigin
 	@RequestMapping(value = "/users/bucket", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String usersBucket(@RequestParam String useremail)  {
-		ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
-		long firstId = 1;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 0, new ArrayList<Map<String, Object>>()));
-		long secondId = 2;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 0, new ArrayList<Map<String, Object>>()));
+		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
+		// long firstId = 1;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 0, new ArrayList<Map<String, Object>>()));
+		// long secondId = 2;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 0, new ArrayList<Map<String, Object>>()));
 		
-		HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
-		firstProductInFirstBucket.put("name", "box");
-		firstProductInFirstBucket.put("price", 30);
-		HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
-		secondProductInFirstBucket.put("name", "pen");
-		secondProductInFirstBucket.put("price", 15);
-		users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
-		users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
+		// firstProductInFirstBucket.put("name", "box");
+		// firstProductInFirstBucket.put("price", 30);
+		// HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
+		// secondProductInFirstBucket.put("name", "pen");
+		// secondProductInFirstBucket.put("price", 15);
+		// users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
+		// users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
 
-		HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
-		firstProductInSecondBucket.put("name", "tv");
-		firstProductInSecondBucket.put("price", 200);
-		HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
-		secondProductInSecondBucket.put("name", "juice");
-		secondProductInSecondBucket.put("price", 75);
-		users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
-		users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
+		// HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
+		// firstProductInSecondBucket.put("name", "tv");
+		// firstProductInSecondBucket.put("price", 200);
+		// HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
+		// secondProductInSecondBucket.put("name", "juice");
+		// secondProductInSecondBucket.put("price", 75);
+		// users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
+		// users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
 		
-		users.forEach((user) -> {
+		// users.forEach((user) -> {
+		// 	if(user.email.contains(useremail)){
+		// 		this.currentUser = user;
+		// 		System.out.println("this.currentUser: " + this.currentUser.email);
+		// 	} else if(!user.email.contains(useremail)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// ArrayList<Object> myProductsInBucket = new ArrayList<Object>(); 
+		// this.currentUser.productsInBucket.forEach((productInBucket) -> {
+		// 	myProductsInBucket.add(productInBucket);
+		// });
+		// return "{\"productsInBucket\":\"" + myProductsInBucket + "\",\"message\":\"success\"}";
+	
+		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.currentUser = user;
 				System.out.println("this.currentUser: " + this.currentUser.email);
@@ -252,43 +292,67 @@ public class MainController {
 			myProductsInBucket.add(productInBucket);
 		});
 		return "{\"productsInBucket\":\"" + myProductsInBucket + "\",\"message\":\"success\"}";
+	
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/users/bucket/buy", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String usersBucketBuy(@RequestParam String useremail) {
-		ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
-		ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
-		long firstId = 1;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
-		long secondId = 2;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
-		System.out.println("email: " + useremail);
-		
-		HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
-		firstProductInFirstBucket.put("id", "1");
-		firstProductInFirstBucket.put("name", "box");
-		firstProductInFirstBucket.put("price", 30);
-		HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
-		secondProductInFirstBucket.put("id", "2");
-		secondProductInFirstBucket.put("name", "pen");
-		secondProductInFirstBucket.put("price", 15);
-		users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
-		users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
-
-		HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
-		firstProductInSecondBucket.put("id", "1");
-		firstProductInSecondBucket.put("name", "tv");
-		firstProductInSecondBucket.put("price", 200);
-		HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
-		secondProductInSecondBucket.put("id", "2");
-		secondProductInSecondBucket.put("name", "juice");
-		secondProductInSecondBucket.put("price", 75);
-		users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
-		users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
-		
-
-		users.forEach((user) -> {
+		// ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
+		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
+		// long firstId = 1;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
+		// long secondId = 2;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
+		// System.out.println("email: " + useremail);
+		// HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
+		// firstProductInFirstBucket.put("id", "1");
+		// firstProductInFirstBucket.put("name", "box");
+		// firstProductInFirstBucket.put("price", 30);
+		// HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
+		// secondProductInFirstBucket.put("id", "2");
+		// secondProductInFirstBucket.put("name", "pen");
+		// secondProductInFirstBucket.put("price", 15);
+		// users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
+		// users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
+		// firstProductInSecondBucket.put("id", "1");
+		// firstProductInSecondBucket.put("name", "tv");
+		// firstProductInSecondBucket.put("price", 200);
+		// HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
+		// secondProductInSecondBucket.put("id", "2");
+		// secondProductInSecondBucket.put("name", "juice");
+		// secondProductInSecondBucket.put("price", 75);
+		// users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
+		// users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
+		// users.forEach((user) -> {
+		// 	if(user.email.contains(useremail)){
+		// 		this.currentUser = user;
+		// 		System.out.println("this.currentUser: " + this.currentUser.email);
+		// 	} else if(!user.email.contains(useremail)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// this.currentUser.getProductsInBucket().forEach((product) -> {
+		// 	System.out.println("product.get(price): " + product.get("price"));
+		// 	Object currentProductPrice = product.get("price");
+		// 	this.commonPrice += Integer.parseInt(currentProductPrice.toString());
+		// });
+		// if(this.currentUser.moneys >= this.commonPrice){
+		// 	int incrementedId = orders.toArray().length + 1;
+		// 	String newStringId = Integer.toString(incrementedId);
+		// 	Long newId = Long.parseLong(newStringId);
+		// 	glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, useremail, this.commonPrice);
+		// 	orders.add(newOrder);
+		// 	this.currentUser.moneys -= this.commonPrice;
+		// 	this.currentUser.getProductsInBucket().clear();
+		// 	return "{\"status\":\"OK\",\"message\":\"success\",\"orders\":\"" + orders.get(0) + "\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";	
+		// } else if(this.currentUser.moneys < this.commonPrice){
+		// 	return "{\"status\":\"Error\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";	
+		// }
+		// return "{\"status\":\"Error\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";	
+	
+		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.currentUser = user;
 				System.out.println("this.currentUser: " + this.currentUser.email);
@@ -302,54 +366,75 @@ public class MainController {
 			this.commonPrice += Integer.parseInt(currentProductPrice.toString());
 		});
 		if(this.currentUser.moneys >= this.commonPrice){
-			int incrementedId = orders.toArray().length + 1;
-			String newStringId = Integer.toString(incrementedId);
-			Long newId = Long.parseLong(newStringId);
-			glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, useremail, this.commonPrice);
-			orders.add(newOrder);
+			Long newId = orderRepository.count() + 1;
+			// glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, useremail, this.commonPrice);
+			glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(useremail, this.commonPrice);
+			orderRepository.save(newOrder);
 			this.currentUser.moneys -= this.commonPrice;
 			this.currentUser.getProductsInBucket().clear();
-			return "{\"status\":\"OK\",\"message\":\"success\",\"orders\":\"" + orders.get(0) + "\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";	
+			userRepository.save(this.currentUser);
+			return "{\"status\":\"OK\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";	
 		} else if(this.currentUser.moneys < this.commonPrice){
 			return "{\"status\":\"Error\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";	
 		}
-		return "{\"status\":\"Error\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";	
+		return "{\"status\":\"Error\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"commonPrice\":\"" + this.commonPrice + "\"}";
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/userscreatesuccess", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String usersCreateSuccess(@RequestParam String useremail, @RequestParam String userpassword, @RequestParam String username, @RequestParam int userage) {
-		ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
-		ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
-		long firstId = 1;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
-		long secondId = 2;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
-		System.out.println("email: " + useremail);
-		
-		HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
-		firstProductInFirstBucket.put("id", "1");
-		firstProductInFirstBucket.put("name", "box");
-		firstProductInFirstBucket.put("price", 30);
-		HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
-		secondProductInFirstBucket.put("id", "2");
-		secondProductInFirstBucket.put("name", "pen");
-		secondProductInFirstBucket.put("price", 15);
-		users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
-		users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
-
-		HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
-		firstProductInSecondBucket.put("id", "1");
-		firstProductInSecondBucket.put("name", "tv");
-		firstProductInSecondBucket.put("price", 200);
-		HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
-		secondProductInSecondBucket.put("id", "2");
-		secondProductInSecondBucket.put("name", "juice");
-		secondProductInSecondBucket.put("price", 75);
-		users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
-		users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
-		
-		users.forEach((user) -> {
+		// ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
+		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
+		// long firstId = 1;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
+		// long secondId = 2;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
+		// System.out.println("email: " + useremail);
+		// HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
+		// firstProductInFirstBucket.put("id", "1");
+		// firstProductInFirstBucket.put("name", "box");
+		// firstProductInFirstBucket.put("price", 30);
+		// HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
+		// secondProductInFirstBucket.put("id", "2");
+		// secondProductInFirstBucket.put("name", "pen");
+		// secondProductInFirstBucket.put("price", 15);
+		// users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
+		// users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
+		// firstProductInSecondBucket.put("id", "1");
+		// firstProductInSecondBucket.put("name", "tv");
+		// firstProductInSecondBucket.put("price", 200);
+		// HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
+		// secondProductInSecondBucket.put("id", "2");
+		// secondProductInSecondBucket.put("name", "juice");
+		// secondProductInSecondBucket.put("price", 75);
+		// users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
+		// users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
+		// users.forEach((user) -> {
+		// 	if(user.email.contains(useremail)){
+		// 		this.userExists = true;
+		// 		System.out.println("Нашёл");
+		// 	} else if(!user.email.contains(useremail)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// if(this.userExists){
+        //     return "{\"status\":\"rollback\",\"message\":\"rollback\"}";	
+        // } else {
+		// 	String encodedPassword = "#";
+        //     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		// 	encodedPassword = passwordEncoder.encode(userpassword);
+		// 	int incrementedId = users.toArray().length + 1;
+		// 	String newStringId = Integer.toString(incrementedId);
+		// 	Long newId = Long.parseLong(newStringId);
+		// 	ArrayList<Map<String, Object>> bucket = new ArrayList<Map<String, Object>>();
+		// 	glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(newId, useremail, encodedPassword, username, userage, 0, bucket);
+		// 	users.add(newUser);
+		// 	this.currentUser = newUser;
+		// }
+		// return "{\"status\":\"OK\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"age\":\"" + this.currentUser.age + "\",\"name\":\"" + this.currentUser.name + "\",\"email\":\"" + this.currentUser.email + "\",\"password\":\"" + this.currentUser.password + "\",\"productsInBucket\":\"" + this.currentUser.productsInBucket + "\",\"id\":\"" + this.currentUser.id + "\"}";	
+	
+		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.userExists = true;
 				System.out.println("Нашёл");
@@ -357,61 +442,67 @@ public class MainController {
 				System.out.println("Не нашёл");
 			}
 		});
-
 		if(this.userExists){
-            return "{\"status\":\"rollback\",\"message\":\"rollback\"}";	
-        } else {
+			return "{\"status\":\"rollback\",\"message\":\"rollback\"}";	
+		} else {
 			String encodedPassword = "#";
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			encodedPassword = passwordEncoder.encode(userpassword);
-			
-			int incrementedId = users.toArray().length + 1;
-			String newStringId = Integer.toString(incrementedId);
-			Long newId = Long.parseLong(newStringId);
-			
+			Long newId = userRepository.count() + 1;
 			ArrayList<Map<String, Object>> bucket = new ArrayList<Map<String, Object>>();
-			glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(newId, useremail, encodedPassword, username, userage, 0, bucket);
-			users.add(newUser);
-			this.currentUser = newUser;
+			// glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(newId, useremail, encodedPassword, username, userage, 0, bucket);
+			glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(useremail, encodedPassword, username, userage, 0, bucket);
+			userRepository.save(newUser);
 		}
-		
-		return "{\"status\":\"OK\",\"message\":\"success\",\"moneys\":\"" + this.currentUser.moneys + "\",\"age\":\"" + this.currentUser.age + "\",\"name\":\"" + this.currentUser.name + "\",\"email\":\"" + this.currentUser.email + "\",\"password\":\"" + this.currentUser.password + "\",\"productsInBucket\":\"" + this.currentUser.productsInBucket + "\",\"id\":\"" + this.currentUser.id + "\"}";	
+		return "{\"status\":\"OK\",\"message\":\"success\"}";	
+	
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/users/bucket/add", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String usersBucketAdd(@RequestParam String useremail, @RequestParam String productname, @RequestParam int productprice) {
-		ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
-		ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
-		long firstId = 1;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
-		long secondId = 2;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
-		System.out.println("email: " + useremail);
-		
-		HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
-		firstProductInFirstBucket.put("id", "1");
-		firstProductInFirstBucket.put("name", "box");
-		firstProductInFirstBucket.put("price", 30);
-		HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
-		secondProductInFirstBucket.put("id", "2");
-		secondProductInFirstBucket.put("name", "pen");
-		secondProductInFirstBucket.put("price", 15);
-		users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
-		users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
+		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
+		// long firstId = 1;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "#######", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
+		// long secondId = 2;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
+		// System.out.println("email: " + useremail);
+		// HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
+		// firstProductInFirstBucket.put("id", "1");
+		// firstProductInFirstBucket.put("name", "box");
+		// firstProductInFirstBucket.put("price", 30);
+		// HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
+		// secondProductInFirstBucket.put("id", "2");
+		// secondProductInFirstBucket.put("name", "pen");
+		// secondProductInFirstBucket.put("price", 15);
+		// users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
+		// users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
+		// firstProductInSecondBucket.put("id", "1");
+		// firstProductInSecondBucket.put("name", "tv");
+		// firstProductInSecondBucket.put("price", 200);
+		// HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
+		// secondProductInSecondBucket.put("id", "2");
+		// secondProductInSecondBucket.put("name", "juice");
+		// secondProductInSecondBucket.put("price", 75);
+		// users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
+		// users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
+		// users.forEach((user) -> {
+		// 	if(user.email.contains(useremail)){
+		// 		this.currentUser = user;
+		// 		System.out.println("Нашёл");
+		// 	} else if(!user.email.contains(useremail)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// HashMap<String, Object> lastProductInBucket = new HashMap<String, Object>();
+		// lastProductInBucket.put("name", productname);
+		// lastProductInBucket.put("price", productprice);
+		// this.currentUser.getProductsInBucket().add(lastProductInBucket);
+		// return "{\"status\":\"OK\",\"message\":\"success\",\"productsInBucket\":\"" + this.currentUser.productsInBucket.size() + "\"}";	
 
-		HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
-		firstProductInSecondBucket.put("id", "1");
-		firstProductInSecondBucket.put("name", "tv");
-		firstProductInSecondBucket.put("price", 200);
-		HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
-		secondProductInSecondBucket.put("id", "2");
-		secondProductInSecondBucket.put("name", "juice");
-		secondProductInSecondBucket.put("price", 75);
-		users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
-		users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
-		
-		users.forEach((user) -> {
+		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.currentUser = user;
 				System.out.println("Нашёл");
@@ -419,26 +510,38 @@ public class MainController {
 				System.out.println("Не нашёл");
 			}
 		});
-
 		HashMap<String, Object> lastProductInBucket = new HashMap<String, Object>();
 		lastProductInBucket.put("name", productname);
 		lastProductInBucket.put("price", productprice);
 		this.currentUser.getProductsInBucket().add(lastProductInBucket);
-	
+		userRepository.save(this.currentUser);
 		return "{\"status\":\"OK\",\"message\":\"success\",\"productsInBucket\":\"" + this.currentUser.productsInBucket.size() + "\"}";	
+
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/product/{productID}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String productByID(@PathVariable("productID") String productID) {
 		
-		ArrayList<glebdyakovcompany.app.shop.models.ProductModel> products = new ArrayList<glebdyakovcompany.app.shop.models.ProductModel>();
-		long firstId = 1;
-		products.add(new glebdyakovcompany.app.shop.models.ProductModel(firstId, "divan", 280));
-		long secondId = 2;
-		products.add(new glebdyakovcompany.app.shop.models.ProductModel(secondId, "cycle", 375));
+		// ArrayList<glebdyakovcompany.app.shop.models.ProductModel> products = new ArrayList<glebdyakovcompany.app.shop.models.ProductModel>();
+		// long firstId = 1;
+		// products.add(new glebdyakovcompany.app.shop.models.ProductModel(firstId, "divan", 280));
+		// long secondId = 2;
+		// products.add(new glebdyakovcompany.app.shop.models.ProductModel(secondId, "cycle", 375));
 		
-		products.forEach((product) -> {
+		// products.forEach((product) -> {
+		// 	Object objectId = product.id;
+		// 	String stringId = objectId.toString();
+		// 	if(stringId.contains(productID)){
+		// 		System.out.println("Нашёл");
+		// 		this.currentProduct = product;
+		// 	} else if(!stringId.contains(productID)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// return "{\"message\":\"success\",\"product\":\"" + this.currentProduct.name + "\"}";	
+	
+		productRepository.findAll().forEach((product) -> {
 			Object objectId = product.id;
 			String stringId = objectId.toString();
 			if(stringId.contains(productID)){
@@ -448,43 +551,65 @@ public class MainController {
 				System.out.println("Не нашёл");
 			}
 		});
-		return "{\"message\":\"success\",\"product\":\"" + this.currentProduct.name + "\"}";	
+		return "{\"message\":\"success\",\"product\":\"" + this.currentProduct + "\"}";	
+	
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/users/check", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String usersCheck(@RequestParam String useremail, @RequestParam String userpassword) {
 		
-		ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
-		long firstId = 1;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "$2a$10$b86IItK8SXH7lSVmbP8kaO/LPBZhonx0jZ8jknlzBtcqEGc2Qk47K", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
-		long secondId = 2;
-		users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
-		System.out.println("email: " + useremail);
+		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
+		// long firstId = 1;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(firstId, "alex@mail.ru", "$2a$10$b86IItK8SXH7lSVmbP8kaO/LPBZhonx0jZ8jknlzBtcqEGc2Qk47K", "alex", 16, 15000, new ArrayList<Map<String, Object>>()));
+		// long secondId = 2;
+		// users.add(new glebdyakovcompany.app.shop.models.UserModel(secondId, "cris@mail.ru", "#######", "cris", 18, 120, new ArrayList<Map<String, Object>>()));
+		// System.out.println("email: " + useremail);
 		
-		HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
-		firstProductInFirstBucket.put("id", "1");
-		firstProductInFirstBucket.put("name", "box");
-		firstProductInFirstBucket.put("price", 30);
-		HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
-		secondProductInFirstBucket.put("id", "2");
-		secondProductInFirstBucket.put("name", "pen");
-		secondProductInFirstBucket.put("price", 15);
-		users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
-		users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
+		// HashMap<String, Object> firstProductInFirstBucket = new HashMap<String, Object>();
+		// firstProductInFirstBucket.put("id", "1");
+		// firstProductInFirstBucket.put("name", "box");
+		// firstProductInFirstBucket.put("price", 30);
+		// HashMap<String, Object> secondProductInFirstBucket = new HashMap<String, Object>();
+		// secondProductInFirstBucket.put("id", "2");
+		// secondProductInFirstBucket.put("name", "pen");
+		// secondProductInFirstBucket.put("price", 15);
+		// users.get(0).getProductsInBucket().add(firstProductInFirstBucket);
+		// users.get(0).getProductsInBucket().add(secondProductInFirstBucket);
 
-		HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
-		firstProductInSecondBucket.put("id", "1");
-		firstProductInSecondBucket.put("name", "tv");
-		firstProductInSecondBucket.put("price", 200);
-		HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
-		secondProductInSecondBucket.put("id", "2");
-		secondProductInSecondBucket.put("name", "juice");
-		secondProductInSecondBucket.put("price", 75);
-		users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
-		users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
+		// HashMap<String, Object> firstProductInSecondBucket = new HashMap<String, Object>();
+		// firstProductInSecondBucket.put("id", "1");
+		// firstProductInSecondBucket.put("name", "tv");
+		// firstProductInSecondBucket.put("price", 200);
+		// HashMap<String, Object> secondProductInSecondBucket = new HashMap<String, Object>();
+		// secondProductInSecondBucket.put("id", "2");
+		// secondProductInSecondBucket.put("name", "juice");
+		// secondProductInSecondBucket.put("price", 75);
+		// users.get(1).getProductsInBucket().add(firstProductInSecondBucket);
+		// users.get(1).getProductsInBucket().add(secondProductInSecondBucket);
 		
-		users.forEach((user) -> {
+		// users.forEach((user) -> {
+		// 	if(user.email.contains(useremail)){
+		// 		this.currentUser = user;
+		// 		System.out.println("Нашёл");
+		// 	} else if(!user.email.contains(useremail)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
+		// boolean passwordCheck = false;
+		// BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder(); 
+		// passwordCheck = bcrypt.matches(userpassword, this.currentUser.getPassword()) && userpassword.length() >= 1;
+		
+		// System.out.println("userpassword: " + userpassword);
+		// System.out.println("this.currentUser.getPassword(): " + this.currentUser.getPassword());
+		// System.out.println("bcrypt.matches(userpassword, this.currentUser.getPassword()): " + bcrypt.matches(userpassword, this.currentUser.getPassword()));
+
+		// if(useremail.contains(this.currentUser.email) && passwordCheck){
+		// 	return "{\"user\":\"" + this.currentUser + "\",\"status\":\"OK\"}";
+		// }
+		// return "{\"status\":\"Error\"}";
+
+		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.currentUser = user;
 				System.out.println("Нашёл");
@@ -495,20 +620,17 @@ public class MainController {
 		boolean passwordCheck = false;
 		BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder(); 
 		passwordCheck = bcrypt.matches(userpassword, this.currentUser.getPassword()) && userpassword.length() >= 1;
-		
-		System.out.println("userpassword: " + userpassword);
-		System.out.println("this.currentUser.getPassword(): " + this.currentUser.getPassword());
-		System.out.println("bcrypt.matches(userpassword, this.currentUser.getPassword()): " + bcrypt.matches(userpassword, this.currentUser.getPassword()));
-
 		if(useremail.contains(this.currentUser.email) && passwordCheck){
-			return "{\"user\":\"" + this.currentUser + "\",\"status\":\"OK\"}";
+			return "{\"user\":\"" + this.currentUser.toString() + "\",\"status\":\"OK\"}";
 		}
 		return "{\"status\":\"Error\"}";
+
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/admin/products/add", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String adminProductsAdd(@RequestParam String productname, @RequestParam int productprice) {
+		
 		// ArrayList<glebdyakovcompany.app.shop.models.ProductModel> products = new ArrayList<glebdyakovcompany.app.shop.models.ProductModel>();
 		// long firstId = 1;
 		// products.add(new glebdyakovcompany.app.shop.models.ProductModel(firstId, "divan", 280));
@@ -521,7 +643,11 @@ public class MainController {
 		// products.add(newProduct);
 		// return "{\"status\":\"OK\",\"products\":\"" + products.size() + "\"}";
 
-		
+		Long newId = productRepository.count() + 1;
+		// glebdyakovcompany.app.shop.models.ProductModel newProduct = new glebdyakovcompany.app.shop.models.ProductModel(newId, productname, productprice);
+		glebdyakovcompany.app.shop.models.ProductModel newProduct = new glebdyakovcompany.app.shop.models.ProductModel(productname, productprice);
+		productRepository.save(newProduct);
+		return "{\"status\":\"OK\"}";
 
 	}
 
@@ -529,54 +655,65 @@ public class MainController {
 	@RequestMapping(value = "/admin/products/delete", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String adminProductsDelete(@RequestParam String productname) {
 		
-		ArrayList<glebdyakovcompany.app.shop.models.ProductModel> products = new ArrayList<glebdyakovcompany.app.shop.models.ProductModel>();
-		long firstId = 1;
-		products.add(new glebdyakovcompany.app.shop.models.ProductModel(firstId, "divan", 280));
-		long secondId = 2;
-		products.add(new glebdyakovcompany.app.shop.models.ProductModel(secondId, "cycle", 375));
-		
+		// ArrayList<glebdyakovcompany.app.shop.models.ProductModel> products = new ArrayList<glebdyakovcompany.app.shop.models.ProductModel>();
+		// long firstId = 1;
+		// products.add(new glebdyakovcompany.app.shop.models.ProductModel(firstId, "divan", 280));
+		// long secondId = 2;
+		// products.add(new glebdyakovcompany.app.shop.models.ProductModel(secondId, "cycle", 375));
+		// products.forEach((product) -> {
+		// 	this.cursorOfDelete++;
+		// 	if(product.name.contains(productname)){
+		// 		products.remove(this.cursorOfDelete);
+		// 		System.out.println("Нашёл");
+		// 	} else if(!product.name.contains(productname)){
+		// 		System.out.println("Не нашёл");
+		// 	}
+		// });
 
-		products.forEach((product) -> {
-			this.cursorOfDelete++;
+
+		productRepository.findAll().forEach((product) -> {
 			if(product.name.contains(productname)){
-				products.remove(this.cursorOfDelete);
+				productRepository.delete(product);
 				System.out.println("Нашёл");
 			} else if(!product.name.contains(productname)){
 				System.out.println("Не нашёл");
 			}
 		});
-
 		return "{\"status\":\"OK\"}";
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/admin/orders", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody String adminOrders() {
+	public @ResponseBody Iterable<OrderModel> adminOrders() {
 		
-		ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
+		// ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
 		
-		int incrementedId = orders.toArray().length + 1;
-		String newStringId = Integer.toString(incrementedId);
-		Long newId = Long.parseLong(newStringId);
-		glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, "George", 50);
-		orders.add(newOrder);
+		// int incrementedId = orders.toArray().length + 1;
+		// String newStringId = Integer.toString(incrementedId);
+		// Long newId = Long.parseLong(newStringId);
+		// glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, "George", 50);
+		// orders.add(newOrder);
 
-		incrementedId = orders.toArray().length + 1;
-		newStringId = Integer.toString(incrementedId);
-		newId = Long.parseLong(newStringId);
-		newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, "Fred", 44);
-		orders.add(newOrder);
+		// incrementedId = orders.toArray().length + 1;
+		// newStringId = Integer.toString(incrementedId);
+		// newId = Long.parseLong(newStringId);
+		// newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, "Fred", 44);
+		// orders.add(newOrder);
 		
-		return "{"+ orders + "}";
+		// return "{"+ orders + "}";
+
+		return orderRepository.findAll();
 	}
 	
 	// public @ResponseBody RedirectView others(HttpServletRequest request) {
 	@CrossOrigin
 	@RequestMapping(value = "*", method = RequestMethod.GET)
 	public RedirectView others() throws FileNotFoundException {
+	// public String others() throws FileNotFoundException {
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequestUri();
 		URI newUri = builder.build().toUri();
 		return new RedirectView("/?redirecttoroute=" + newUri.getPath());
+		// return "redirect:/?redirecttoroute=" + newUri.getPath();
 	}
 
 }
