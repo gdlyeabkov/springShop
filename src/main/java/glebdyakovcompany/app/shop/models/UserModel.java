@@ -109,7 +109,22 @@ public class UserModel {
 
     @Override
     public String toString(){
-        return "{\'id\'':\'"+ getId() + "\',\'email\':\'"+ getEmail() + "\',\'password\':\'"+ getPassword() + "\',\'name\':\'"+ getName() + "\',\'age\':\'"+ getAge() + "\',\'moneys\':\'"+ getMoneys() + "\',\'productsInBucket\':\'"+ "[]" + "\'}";
+        String bucket = "[";
+        int productIndex = 0;
+        for(Map<String, Object> productInBucket : productsInBucket){
+            productIndex++;
+            bucket += "{\'id\':\'" + productInBucket.get("id") + "\',\'name\':\'" + productInBucket.get("name") + "\',\'price\':\'" + productInBucket.get("price") + "\'}";
+            if(productsInBucket.size() >= 2 && productIndex != productsInBucket.size()){
+                bucket += ",";
+            }
+        }
+        bucket += "]";
+        System.out.println("bucket: "+ bucket);
+        // return "{\'id\'':\'"+ getId() + "\',\'email\':\'"+ getEmail() + "\',\'password\':\'"+ getPassword() + "\',\'name\':\'"+ getName() + "\',\'age\':\'"+ getAge() + "\',\'moneys\':\'"+ getMoneys() + "\',\'productsInBucket\':\'"+ "[]" + "\'}";
+        // return "{\'id\'':\'"+ getId() + "\',\'email\':\'"+ getEmail() + "\',\'password\':\'"+ getPassword() + "\',\'name\':\'"+ getName() + "\',\'age\':\'"+ getAge() + "\',\'moneys\':\'"+ getMoneys() + "\',\'productsInBucket\':\'"+ bucket + "\'}";
+        // return "{\'productsInBucket\':\'"+ bucket + "\'}";
+        return bucket;
+
     }
 
 }

@@ -178,11 +178,14 @@ public class MainController {
 		// }
 		// return "{\"status\":\"OK\",\"message\":\"success\",\"products\":\"" + this.currentUser.getProductsInBucket().get(0).get("id") + "\"}";
 		
-		this.cursorOfDelete = 0;
+		// this.cursorOfDelete = 0;
+		this.cursorOfDelete = -1;
+
 		userRepository.findAll().forEach((user) -> {
 			if(user.email.contains(useremail)){
 				this.currentUser = user;
 				System.out.println("this.currentUser: " + this.currentUser.email);
+				System.out.println("this.getProductsInBucket(): " + this.currentUser.getProductsInBucket().toString());
 			} else if(!user.email.contains(useremail)){
 				System.out.println("Не нашёл");
 			}
@@ -302,13 +305,28 @@ public class MainController {
 				System.out.println("Не нашёл");
 			}
 		});
-		ArrayList<Object> myProductsInBucket = new ArrayList<Object>(); 
-		this.currentUser.productsInBucket.forEach((productInBucket) -> {
-			myProductsInBucket.add(productInBucket);
-		});
-		String[]  myProductsInBucketJSON = myProductsInBucket.toString().split("=");
-		String myProductsInBucketJSONjoin = String.join(":", myProductsInBucketJSON);
-		return "{\"productsInBucket\":\"" + myProductsInBucketJSONjoin + "\",\"message\":\"success\"}";
+		// ArrayList<Object> myProductsInBucket = new ArrayList<Object>(); 
+		// this.currentUser.productsInBucket.forEach((productInBucket) -> {
+		// 	myProductsInBucket.add(productInBucket);
+		// });
+
+		// String[]  myProductsInBucketJSON = myProductsInBucket.toString().split("=");
+		// String myProductsInBucketJSONjoin = String.join(":", myProductsInBucketJSON);
+		
+		// String[]  myProductsInBucketJSON = this.currentUser.productsInBucket.toString().split("=");
+		// String myProductsInBucketJSONjoin = String.join(":", myProductsInBucketJSON);
+
+		// myProductsInBucketJSON = myProductsInBucketJSONjoin.split("\'");
+		// myProductsInBucketJSONjoin = String.join("\"", myProductsInBucketJSON);
+
+		String[] myProductsInBucketJSON = this.currentUser.toString().split("\'");
+		String myProductsInBucketJSONjoin = String.join("\"", myProductsInBucketJSON);
+		
+		// JSONArray json = new JSONArray();
+		// JSONObject productjson = new JSONObject();
+		// json.put("name", );
+
+		return "{\"productsInBucket\":" + myProductsInBucketJSONjoin + ",\"message\":\"success\"}";
 	
 	}
 
@@ -398,8 +416,8 @@ public class MainController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/userscreatesuccess", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody String usersCreateSuccess(@RequestParam String useremail, @RequestParam String userpassword, @RequestParam String username, @RequestParam int userage) {
+	@RequestMapping(value = "/users/usercreatesuccess", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody String userCreateSuccess(@RequestParam String useremail, @RequestParam String userpassword, @RequestParam String username, @RequestParam int userage) {
 		// ArrayList<glebdyakovcompany.app.shop.models.OrderModel> orders = new ArrayList<glebdyakovcompany.app.shop.models.OrderModel>();
 		// ArrayList<glebdyakovcompany.app.shop.models.UserModel> users = new ArrayList<glebdyakovcompany.app.shop.models.UserModel>();
 		// long firstId = 1;
@@ -467,8 +485,8 @@ public class MainController {
 			encodedPassword = passwordEncoder.encode(userpassword);
 			Long newId = userRepository.count() + 1;
 			ArrayList<Map<String, Object>> bucket = new ArrayList<Map<String, Object>>();
-			// glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(newId, useremail, encodedPassword, username, userage, 0, bucket);
-			glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(useremail, encodedPassword, username, userage, 0, bucket);
+			glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(newId, useremail, encodedPassword, username, userage, 0, bucket);
+			// glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(useremail, encodedPassword, username, userage, 0, bucket);
 			userRepository.save(newUser);
 		}
 		return "{\"status\":\"OK\",\"message\":\"success\"}";	
@@ -527,7 +545,24 @@ public class MainController {
 				System.out.println("Не нашёл");
 			}
 		});
+		
+		// System.out.println("this.currentUser.productsInBucket: " + this.currentUser.productsInBucket.toString());
+		// System.out.println("this.currentUser.productsInBucket: " + this.currentUser.productsInBucket.get(0).getClass().toString());
+
 		HashMap<String, Object> lastProductInBucket = new HashMap<String, Object>();
+		Double newGeneratedId = Math.random() * 500;
+		Float floatId = Float.parseFloat(newGeneratedId.toString());
+		// Double newFloorGeneratedId = Math.round(floatId);
+		Integer newFloorGeneratedId = Math.round(floatId);
+		String stringGeneratedId = newFloorGeneratedId.toString();
+		Integer preparedGeneratedId = Integer.parseInt(stringGeneratedId);
+		stringGeneratedId = preparedGeneratedId.toString();
+		
+		// String newStringGeneratedId = newGeneratedId.toString();
+		// int preparedGeneratedId = Integer.parseInt(newStringGeneratedId);
+		// Double generatedId = Math.floor(preparedGeneratedId);
+		// String stringGeneratedId = generatedId.toString();
+		lastProductInBucket.put("id", stringGeneratedId);
 		lastProductInBucket.put("name", productname);
 		lastProductInBucket.put("price", productprice);
 		
@@ -574,7 +609,13 @@ public class MainController {
 				System.out.println("Не нашёл");
 			}
 		});
-		return "{\"message\":\"success\",\"product\":\"" + this.currentProduct + "\"}";	
+
+
+		// return "{\"message\":\"success\",\"product\":\"" + this.currentProduct + "\"}";	
+		
+		String[]  productJSON = this.currentProduct.toString().split("\'");
+		String productJSONJoin = String.join("\"", productJSON);
+		return "{\"message\":\"success\",\"product\":" + productJSONJoin + "}";	
 	
 	}
 
