@@ -1,5 +1,9 @@
 package glebdyakovcompany.app.shop.controllers;
 
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.springframework.beans.factory.annotation.Autowired;
 // import javax.servlet.http.HttpServletRequest;
 // import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
@@ -24,6 +28,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import glebdyakovcompany.app.shop.models.OrderModel;
 import glebdyakovcompany.app.shop.models.ProductModel;
+import net.minidev.json.JSONObject;
 
 // import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
@@ -106,8 +111,18 @@ public class MainController {
 
 	@CrossOrigin
     @RequestMapping(value = "/home", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<ProductModel> home()  {
-		return productRepository.findAll();
+	public @ResponseBody String home()  {
+		
+		System.out.println("productRepository.findAll().toString(): " + productRepository.findAll().toString());
+		String[]  productsJSON = productRepository.findAll().toString().split("\'");
+		System.out.println("productsJSON: " + productsJSON);
+		String productsJSONJoin = String.join("\"", productsJSON);
+		System.out.println("productsJSONJoin: " + productsJSONJoin);
+		
+		
+		// return productRepository.findAll();
+		// return "{\"allProducts\":\"" + productRepository.findAll() + "\"}";
+		return "{\"allProducts\":" + productsJSONJoin + "}";
 	}
 
 	@CrossOrigin
@@ -291,7 +306,9 @@ public class MainController {
 		this.currentUser.productsInBucket.forEach((productInBucket) -> {
 			myProductsInBucket.add(productInBucket);
 		});
-		return "{\"productsInBucket\":\"" + myProductsInBucket + "\",\"message\":\"success\"}";
+		String[]  myProductsInBucketJSON = myProductsInBucket.toString().split("=");
+		String myProductsInBucketJSONjoin = String.join(":", myProductsInBucketJSON);
+		return "{\"productsInBucket\":\"" + myProductsInBucketJSONjoin + "\",\"message\":\"success\"}";
 	
 	}
 
@@ -513,7 +530,13 @@ public class MainController {
 		HashMap<String, Object> lastProductInBucket = new HashMap<String, Object>();
 		lastProductInBucket.put("name", productname);
 		lastProductInBucket.put("price", productprice);
-		this.currentUser.getProductsInBucket().add(lastProductInBucket);
+		
+		// this.currentUser.getProductsInBucket().add(lastProductInBucket);
+		
+		ArrayList<Map<String, Object>> updatedBucket = this.currentUser.getProductsInBucket();
+		updatedBucket.add(lastProductInBucket);
+		this.currentUser.setProductsInBucket(updatedBucket);
+
 		userRepository.save(this.currentUser);
 		return "{\"status\":\"OK\",\"message\":\"success\",\"productsInBucket\":\"" + this.currentUser.productsInBucket.size() + "\"}";	
 
@@ -633,7 +656,7 @@ public class MainController {
 		
 		// ArrayList<glebdyakovcompany.app.shop.models.ProductModel> products = new ArrayList<glebdyakovcompany.app.shop.models.ProductModel>();
 		// long firstId = 1;
-		// products.add(new glebdyakovcompany.app.shop.models.ProductModel(firstId, "divan", 280));
+		// products.add(new glebdyakovcompany.app.shop.models.P1roductModel(firstId, "divan", 280));
 		// long secondId = 2;
 		// products.add(new glebdyakovcompany.app.shop.models.ProductModel(secondId, "cycle", 375));
 		// int incrementedId = products.toArray().length + 1;

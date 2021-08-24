@@ -57,7 +57,7 @@ public class ProductModel {
 
     @Override
     public String toString(){
-        return "{\'id\'':\'"+ getId() + "\',\'name\':\'"+ getName() + "\',\'price\':\'"+ getPrice() + "\'}";
+        return "{\'id\':\'"+ getId() + "\',\'name\':\'"+ getName() + "\',\'price\':\'"+ getPrice() + "\'}";
         // return "{\'id\':2}";
         // return "abc";
     }
