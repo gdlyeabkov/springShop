@@ -113,7 +113,7 @@ public class UserModel {
         int productIndex = 0;
         for(Map<String, Object> productInBucket : productsInBucket){
             productIndex++;
-            bucket += "{\'id\':\'" + productInBucket.get("id") + "\',\'name\':\'" + productInBucket.get("name") + "\',\'price\':\'" + productInBucket.get("price") + "\'}";
+            bucket += "{\'id\':\'" + productInBucket.get("id") + "\',\'name\':\'" + productInBucket.get("name") + "\',\'price\':" + productInBucket.get("price") + "}";
             if(productsInBucket.size() >= 2 && productIndex != productsInBucket.size()){
                 bucket += ",";
             }

@@ -402,8 +402,8 @@ public class MainController {
 		});
 		if(this.currentUser.moneys >= this.commonPrice){
 			Long newId = orderRepository.count() + 1;
-			// glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, useremail, this.commonPrice);
-			glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(useremail, this.commonPrice);
+			glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(newId, useremail, this.commonPrice);
+			// glebdyakovcompany.app.shop.models.OrderModel newOrder = new glebdyakovcompany.app.shop.models.OrderModel(useremail, this.commonPrice);
 			orderRepository.save(newOrder);
 			this.currentUser.moneys -= this.commonPrice;
 			this.currentUser.getProductsInBucket().clear();
