@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 // import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 // import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.PostMapping;
@@ -489,8 +490,8 @@ public class MainController {
 			// glebdyakovcompany.app.shop.models.UserModel newUser = new glebdyakovcompany.app.shop.models.UserModel(useremail, encodedPassword, username, userage, 0, bucket);
 			userRepository.save(newUser);
 		}
-		return "{\"status\":\"OK\",\"message\":\"success\"}";	
-	
+		// return "{\"status\":\"OK\",\"message\":\"success\"}";	
+		return "created";
 	}
 
 	@CrossOrigin
@@ -779,5 +780,12 @@ public class MainController {
 		return new RedirectView("/?redirecttoroute=" + newUri.getPath());
 		// return "redirect:/?redirecttoroute=" + newUri.getPath();
 	}
+
+	// @ExceptionHandler(value={Exception.class})
+	// public String notFoundErrorHandler() {
+	// 	ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequestUri();
+	// 	URI newUri = builder.build().toUri();
+	// 	return "redirect:/?redirecttoroute=" + newUri.getPath();
+	// }
 
 }

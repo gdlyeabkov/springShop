@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Component
 public class ShopApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		SpringApplication.run(ShopApplication.class, args);
 	}
 
