@@ -99,10 +99,6 @@ public class MainController {
     	// headers.setContentType(MediaType.TEXT_HTML);
 		// return new ResponseEntity<byte[]>(b, headers, HttpStatus.CREATED);
 		
-		Postgres postgresConnection = new Postgres();
-		// SimpleElephantSQLExample postgresConnection = new SimpleElephantSQLExample();
-		postgresConnection.workWithDB();
-
 		return "index";
 		
 	}
@@ -496,7 +492,8 @@ public class MainController {
 			userRepository.save(newUser);
 		}
 		// return "{\"status\":\"OK\",\"message\":\"success\"}";	
-		return "created";
+		// return "created";
+		return "{\"status\":\"created\",\"message\":\"success\"}";
 	}
 
 	@CrossOrigin
