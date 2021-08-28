@@ -1,6 +1,6 @@
 <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
   <property name="driverClassName" value="org.postgresql.Driver"/>
-  <property name="url" value="jdbc:postgresql://qpdfznab:F_WTjrlUyEp4TpzIfkkqgX8xWOt_vQTk@kashin.db.elephantsql.com:5432/qpdfznab"/>
+  <property name="url" value="jdbc:postgresql://qpdfznab:F_WTjrlUyEp4TpzIfkkqgX8xWOt_vQTk@kashin.db.elephantsql.com/qpdfznab"/>
   <property name="username" value="qpdfznab"/>
   <property name="password" value="F_WTjrlUyEp4TpzIfkkqgX8xWOt_vQTk"/>
 </bean>

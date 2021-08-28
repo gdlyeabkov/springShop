@@ -55,6 +55,7 @@ import java.util.ArrayList;
 
 // import javax.servlet.ServletContext;
 
+import glebdyakovcompany.app.shop.connections.*;
 
 @Controller
 public class MainController {
@@ -98,6 +99,10 @@ public class MainController {
     	// headers.setContentType(MediaType.TEXT_HTML);
 		// return new ResponseEntity<byte[]>(b, headers, HttpStatus.CREATED);
 		
+		Postgres postgresConnection = new Postgres();
+		// SimpleElephantSQLExample postgresConnection = new SimpleElephantSQLExample();
+		postgresConnection.workWithDB();
+
 		return "index";
 		
 	}
