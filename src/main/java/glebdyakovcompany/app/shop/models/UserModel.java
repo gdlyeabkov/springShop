@@ -1,5 +1,4 @@
 package glebdyakovcompany.app.shop.models;
-// import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import javax.persistence.*;
@@ -119,12 +118,7 @@ public class UserModel {
             }
         }
         bucket += "]";
-        System.out.println("bucket: "+ bucket);
-        // return "{\'id\'':\'"+ getId() + "\',\'email\':\'"+ getEmail() + "\',\'password\':\'"+ getPassword() + "\',\'name\':\'"+ getName() + "\',\'age\':\'"+ getAge() + "\',\'moneys\':\'"+ getMoneys() + "\',\'productsInBucket\':\'"+ "[]" + "\'}";
-        // return "{\'id\'':\'"+ getId() + "\',\'email\':\'"+ getEmail() + "\',\'password\':\'"+ getPassword() + "\',\'name\':\'"+ getName() + "\',\'age\':\'"+ getAge() + "\',\'moneys\':\'"+ getMoneys() + "\',\'productsInBucket\':\'"+ bucket + "\'}";
-        // return "{\'productsInBucket\':\'"+ bucket + "\'}";
         return bucket;
-
     }
 
 }
